@@ -1,4 +1,51 @@
+<<<<<<< HEAD
+=======
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.egg-info/
+.Python
+env/
+venv/
+.streamlit/
+
+# Data files
+*.txt
+!requirements.txt
+reddit_data.txt
+github_data.txt
+pdf-files.txt
+
+# Database files
+db.json
+config.json
+records-pdf.json
+*-records.json
+
+>>>>>>> 4884a93c4df5a4baa10dac7648dce6b71f4a93c8
 # ChromaDB
 chroma_db/
 chroma_db_*/
 chroma_db.zip
+<<<<<<< HEAD
+=======
+
+# Logs and debug files
+*.log
+query_log.txt
+troubleshoot.txt
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Archives
+*.zip
+*.tar.gz
+Archive.zip
+>>>>>>> 4884a93c4df5a4baa10dac7648dce6b71f4a93c8

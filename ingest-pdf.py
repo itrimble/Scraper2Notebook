@@ -6,6 +6,7 @@ from langchain_community.document_loaders import PyPDFLoader
 from tinydb import TinyDB, where
 import re, math
 
+<<<<<<< HEAD
 def usage():
     """Usage: python ingest-pdf.py
     
@@ -16,6 +17,8 @@ def usage():
     print("This script reads a list of PDF files from pdf-files.txt and ingests them into ChromaDB.")
     print("Make sure to run scrape-pdf-list.sh first to populate pdf-files.txt with PDF paths.")
 
+=======
+>>>>>>> 4884a93c4df5a4baa10dac7648dce6b71f4a93c8
 records_db = TinyDB('./records-pdf.json')
 pdf_ingest_table = records_db.table('pdf_ingest')
 
@@ -31,6 +34,7 @@ def start():
     getFileList("./pdf-files.txt")
 
 def getFileList(filename: str):
+<<<<<<< HEAD
     try:
         with open(filename) as fp:
             list_size = sum(1 for _ in fp)
@@ -64,6 +68,36 @@ def getFileList(filename: str):
         print(f"Error: File '{filename}' not found.")
         print("Run ./scrape-pdf-list.sh to create the PDF list first.")
         usage()
+=======
+    with open(filename) as fp:
+        list_size = sum(1 for _ in fp)
+        print("Number of PDFs: " + str(list_size))
+        fp.close()
+    with open(filename) as fp:
+        skip_count = 0
+        count = 0
+        last_pc = 0.0
+        for pdf_filename in fp:
+            cleaned_pdf_filename = pdf_filename.replace("\n", "")
+            pre_title = getPdfTitle(cleaned_pdf_filename)
+            percentage = (float(count) / float(list_size) * 100)
+            if math.floor(last_pc) < math.floor(percentage):
+                print("\n*** {:.2f}% ***\n".format(percentage))
+                skip_count = 0
+            last_pc = percentage
+            if not isAlreadyProcessed(cleaned_pdf_filename, pre_title):
+                skip_count = 0
+                percentage = (float(count) / float(list_size) * 100)
+                print("\n{:.2f}% : ".format(percentage) + cleaned_pdf_filename)
+                processPdf(cleaned_pdf_filename)
+            else:
+                if skip_count > 0:
+                    print(".", end="", flush=True)
+                else:
+                    print("skipping already processed.", end="", flush=True)
+                skip_count += 1
+            count += 1
+>>>>>>> 4884a93c4df5a4baa10dac7648dce6b71f4a93c8
 
 def isAlreadyProcessed(filename: str, title: str):
     return len(pdf_ingest_table.search(where('file') == filename)) > 0 or (title != "" and len(pdf_ingest_table.search(where('title') == title)) > 0)
@@ -116,5 +150,11 @@ def getPdfTitle(filename: str):
 def removeNonAlphaNumOrSpace(s: str):
     return re.sub(r'[^A-Za-z0-9,:\. ]+', '', s)
     
+<<<<<<< HEAD
 if __name__ == "__main__":
     start()
+=======
+
+if __name__ == "__main__":
+    start()
+>>>>>>> 4884a93c4df5a4baa10dac7648dce6b71f4a93c8

@@ -1,0 +1,12 @@
+{
+    "reddit": {
+        "client_id": "YOUR_CLIENT_ID",
+        "client_secret": "YOUR_CLIENT_SECRET",
+        "user_agent": "YourAppName/1.0 by YourRedditUsername"
+    },
+    "scrape_config": {
+        "subreddit": "RooCode",
+        "post_limit": 100,
+        "output_file": "reddit_data.txt"
+    }
+}
