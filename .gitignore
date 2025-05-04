@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.egg-info/
+.Python
+env/
+venv/
+.streamlit/
+
+# Data files
+*.txt
+!requirements.txt
+reddit_data.txt
+github_data.txt
+pdf-files.txt
+
+# Database files
+db.json
+config.json
+records-pdf.json
+*-records.json
+
+# ChromaDB
+chroma_db/
+chroma_db_*/
+chroma_db.zip
+
+# Logs and debug files
+*.log
+query_log.txt
+troubleshoot.txt
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Archives
+*.zip
+*.tar.gz
+Archive.zip
