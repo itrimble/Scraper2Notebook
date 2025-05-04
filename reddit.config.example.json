@@ -1,0 +1,24 @@
+# Reddit API Configuration Instructions
+#
+# To get your Reddit API credentials:
+# 1. Go to https://www.reddit.com/prefs/apps
+# 2. Click "create app" or "create another app" at the bottom
+# 3. Fill in the name, select "script", and set the redirect URI to http://localhost:8080
+# 4. Click "create app"
+# 5. The client_id is the string under the app name
+# 6. The client_secret is labeled "secret"
+#
+# Replace the placeholders below with your actual credentials
+
+{
+    "reddit": {
+        "client_id": "YOUR_CLIENT_ID",
+        "client_secret": "YOUR_CLIENT_SECRET", 
+        "user_agent": "YourAppName/1.0 by YourRedditUsername"
+    },
+    "scrape_config": {
+        "subreddit": "RooCode",
+        "post_limit": 100,
+        "output_file": "reddit_data.txt"
+    }
+}
