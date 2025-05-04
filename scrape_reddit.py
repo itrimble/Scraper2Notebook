@@ -1,6 +1,9 @@
 import praw
-
-reddit = praw.Reddit(client_id="ELwPTiiusxvHHoeg5e4oYA", client_secret="jtyQ2SwdwdQjAhjqjK0JpdC6o5nMiw", user_agent="scraper")
+reddit = praw.Reddit(
+    client_id="YOUR_CLIENT_ID", 
+    client_secret="YOUR_CLIENT_SECRET", 
+    user_agent="YOUR_USER_AGENT"
+)
 subreddit = reddit.subreddit("RooCode")
 with open("reddit_data.txt", "w") as f:
     for post in subreddit.top(limit=100):
