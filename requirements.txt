@@ -25,3 +25,10 @@ logging==0.5.1.2
 # Web and API
 fastapi==0.95.2
 uvicorn==0.22.0
+
+langchain==0.1.0  # Add specific version
+langchain-ollama
+langchain-community
+langchain-core
+langchain-chroma
+langchain-huggingface
