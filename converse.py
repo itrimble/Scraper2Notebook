@@ -8,7 +8,6 @@ from langchain_core.documents import Document
 from tinydb import TinyDB
 import json
 
-<<<<<<< HEAD
 # Set to True to enable web search
 WEB_SEARCH_ENABLED = False
 # Set to True to enable speech output on Mac
@@ -16,21 +15,13 @@ SPEAK_ALOUD_MAC_ENABLED = False
 # Set to True to enable debug logging
 DEBUG_ENABLED = False
 
-db = TinyDB('config.json')
-agent_table = db.table('agent')
-=======
-db = TinyDB('db.json')
-agent_table = db.table('agent_table')
->>>>>>> 4884a93c4df5a4baa10dac7648dce6b71f4a93c8
+db = TinyDB('db.json') # Corrected filename
+agent_table = db.table('agent') # Corrected table name
 
 class Converse:
     def __init__(self):
         self.embedding_function = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-<<<<<<< HEAD
-        self.vectorstore = Chroma(persist_directory="./chroma_db_pdfs", embedding_function=self.embedding_function)
-=======
-        self.vectorstore = Chroma(persist_directory="../chroma_db", embedding_function=self.embedding_function)
->>>>>>> 4884a93c4df5a4baa10dac7648dce6b71f4a93c8
+        self.vectorstore = Chroma(persist_directory="./chroma_db", embedding_function=self.embedding_function) # Corrected persist_directory
         self.retriever = self.vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 6})
 
     def chat(self, query, agent_table_row):
@@ -52,8 +43,4 @@ class Converse:
             if context == "No relevant context found.":
                 return chain.invoke("I couldn't find relevant context. Here's my best answer: " + question)
             return chain.invoke(f"Here's some context to help you answer my question: {context}\n\nHere's my question: {question}")
-<<<<<<< HEAD
         return chain.invoke(query)
-=======
-        return chain.invoke(query)
->>>>>>> 4884a93c4df5a4baa10dac7648dce6b71f4a93c8
