@@ -43,6 +43,69 @@ except Exception as e: # Catch any other unexpected errors during config loading
     sys.exit(1)
 
 
+# --- Main scraping logic ---
+def main_scraping_logic():
+    print("Initializing PRAW client...")
+    reddit = praw.Reddit(
+        client_id=reddit_config["client_id"],
+        client_secret=reddit_config["client_secret"],
+        user_agent=reddit_config["user_agent"]
+    )
+    print(f"Fetching posts from subreddit: {scrape_config['subreddit']} with limit: {scrape_config['post_limit']}")
+    subreddit = reddit.subreddit(scrape_config["subreddit"])
+    
+    output_file = scrape_config["output_file"]
+    print(f"Attempting to write scraped data to: {output_file}")
+    
+    posts_written = 0
+    comments_written = 0
+
+    with open(output_file, "w", encoding='utf-8') as f: # Added encoding
+        for post in subreddit.top(limit=scrape_config["post_limit"]):
+            f.write(f"Title: {post.title}\n") # Added "Title: " prefix for clarity
+            # Ensure selftext is not None and handle potential newlines within selftext
+            selftext = post.selftext.replace('\n', ' ') if post.selftext else ""
+            f.write(f"Selftext: {selftext}\n") # Added "Selftext: " prefix
+            posts_written += 1
+            
+            # Fetch comments for the post
+            # Using .comments.list() to get all comments, then iterating
+            # This avoids issues with MoreComments objects if not replacing them.
+            # For simplicity, let's stick to the existing direct iteration if it works for top-level.
+            # If MoreComments is an issue, one might need post.comments.replace_more(limit=0)
+            # then iterate post.comments.list()
+            post.comments.replace_more(limit=0) # Ensure all comments are loaded
+            for comment in post.comments.list(): # Iterate through the flattened list of comments
+                if hasattr(comment, 'body'):
+                    # Ensure comment body is not None and handle potential newlines
+                    comment_body = comment.body.replace('\n', ' ') if comment.body else ""
+                    if comment_body: # Only write if there's a body
+                        f.write(f"Comment: {comment_body}\n") # Added "Comment: " prefix
+                        comments_written += 1
+            f.write("---\n") # Separator between posts
+    
+    print(f"Scraping complete. {posts_written} posts and {comments_written} comments written to {output_file}.")
+
+if __name__ == "__main__":
+    try:
+        # Configuration loading is already handled above and exits on failure.
+        # If execution reaches here, config loading was successful.
+        main_scraping_logic()
+        print("scrape_reddit.py executed successfully.")
+        sys.exit(0)
+    except praw.exceptions.PRAWException as e:
+        print(f"A PRAW (Reddit API) related error occurred: {e}")
+        sys.exit(1)
+    except IOError as e:
+        print(f"An I/O error occurred (e.g., writing to file {scrape_config.get('output_file', 'output.txt')}): {e}")
+        sys.exit(1)
+    except Exception as e:
+        print(f"An unexpected error occurred during scraping: {e}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
+=======
+
 reddit = praw.Reddit(
     client_id=reddit_config["client_id"],
     client_secret=reddit_config["client_secret"],
@@ -55,3 +118,4 @@ with open(scrape_config["output_file"], "w") as f:
         for comment in post.comments:
             if hasattr(comment, 'body'):
                 f.write(f"{comment.body}\n")
+

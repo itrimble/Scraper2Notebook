@@ -15,6 +15,7 @@ The RooCode Data Query Application is a Python-based tool designed to provide a 
 *   **Chat Management:** Easily clear chat history for a fresh start.
 *   **Performance Metrics:** Displays response time for each AI-generated answer.
 
+
 ## Tech Stack
 
 *   **Core:** Python 3.7+
@@ -103,6 +104,10 @@ This project includes comprehensive documentation to help you understand its arc
 *   [**Backend Documentation (BACKEND_DOCUMENTATION.md):**](BACKEND_DOCUMENTATION.md) In-depth information about the backend components, data flow, and key libraries.
 *   [**Frontend Documentation (FRONTEND_DOCUMENTATION.md):**](FRONTEND_DOCUMENTATION.md) Description of the UI structure, styling, and user interaction logic.
 *   [**User Flow Documentation (USER_FLOW_DOCUMENTATION.md):**](USER_FLOW_DOCUMENTATION.md) Step-by-step guide through typical user journeys within the application.
+
+*   [**Automation Guide (AUTOMATION_GUIDE.md):**](AUTOMATION_GUIDE.md) Instructions for setting up automated daily data updates and notifications.
+
+
 
 ## Troubleshooting
 
