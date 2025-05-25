@@ -1,165 +1,128 @@
-# Scraper2Notebook
+# RooCode Data Query Application
 
-<<<<<<< HEAD
-A customizable Retrieval-Augmented Generation (RAG) implementation using Ollama for a private local instance Large Language Model (LLM) agent with a convenient web interface.
-=======
-![CI](https://github.com/itrimble/Scraper2Notebook/actions/workflows/python-app.yml/badge.svg)
-![License](https://img.shields.io/github/license/itrimble/Scraper2Notebook)
-![Issues](https://img.shields.io/github/issues/itrimble/Scraper2Notebook)
+## Overview
 
-# Ollama LLM RAG
-
-This project is a customizable Retrieval-Augmented Generation (RAG) implementation using Ollama for a private local instance Large Language Model (LLM) agent with a convenient web interface. It uses both static memory (implemented for PDF ingestion) and dynamic memory that recalls previous conversations with day-bound timestamps.
-
-In other words, this project is a chatbot that simulates conversation with a person who remembers previous conversations and can reference a bunch of PDFs.
-
-It is written in Python and based on the simple [pdfchat example project](https://github.com/SonicWarrior1/pdfchat), explained in [this Medium post](https://medium.com/@harjot802/building-a-local-pdf-chat-application-with-mistral-7b-llm-langchain-ollama-and-streamlit-67b314fbab57). Thanks to Harjot / SonicWarrior1.
->>>>>>> 4884a93c4df5a4baa10dac7648dce6b71f4a93c8
+The RooCode Data Query Application is a Python-based tool designed to provide a chat-based interface for querying a specialized knowledge base. It utilizes Streamlit for its professional, dark-themed user interface, allowing users to interact intuitively with data. The knowledge base is built from information scraped from Reddit (specifically the "RooCode" community or user-configured subreddits) and potentially other text sources like GitHub repository data. This application leverages local Large Language Models (LLMs) served via Ollama and employs ChromaDB as a vector store to enable Retrieval Augmented Generation (RAG), delivering informed and contextually relevant answers.
 
 ## Features
 
-- Configure the agent (chatbot) with a script, or dive into the Modelfile yourself
-- Configure the models used for your chatbot with a script
-<<<<<<< HEAD
-- Easily scrape your collection of PDFs and ingest with handy scripts
-=======
-- (Optional) Easily scrape your collection of PDFs and ingest with handy scripts
->>>>>>> 4884a93c4df5a4baa10dac7648dce6b71f4a93c8
-- Simple interface to run and interact with the chatbot agent using Streamlit
-- Long term memory, compressing and making searchable with day-bound timestamps
-- Web search when the chatbot cannot come up with a good answer (disabled by default)
+*   **Chat-Based Querying:** Interact with your data using natural language questions.
+*   **Configurable Reddit Data Scraping:** Tailor data collection from specific subreddits with adjustable post limits.
+*   **Vector Store Ingestion:** A robust pipeline processes text data and populates a ChromaDB vector store for efficient semantic search.
+*   **Local LLM Integration:** Seamlessly connects with local LLMs hosted by Ollama.
+*   **LLM Selection:** Dynamically choose from available Ollama models directly within the UI.
+*   **Polished UI:** A dark-themed, professional interface built with Streamlit, featuring a sidebar for controls and clear chat display.
+*   **Chat Management:** Easily clear chat history for a fresh start.
+*   **Performance Metrics:** Displays response time for each AI-generated answer.
 
-<<<<<<< HEAD
-## Getting Started
+## Tech Stack
 
-See the SETUP_GUIDE.md file for detailed setup instructions.
+*   **Core:** Python 3.7+
+*   **Web UI:** Streamlit
+*   **LLM Integration:** Ollama, `ollama` Python library
+*   **RAG & Orchestration:** Langchain
+*   **Vector Database:** ChromaDB (via `langchain_chroma`)
+*   **Embeddings:** HuggingFace Sentence Transformers (via `langchain_huggingface`, e.g., `sentence-transformers/all-MiniLM-L6-v2`)
+*   **Reddit Scraping:** PRAW (Python Reddit API Wrapper)
+*   **Configuration Database:** TinyDB (for storing agent/model settings)
 
+## Prerequisites
+
+*   **Python:** Version 3.7 or higher.
+*   **Ollama:** The Ollama service must be installed, running, and accessible.
+    *   Ensure desired models (e.g., Llama3, Qwen2.5) are downloaded:
+        ```bash
+        ollama pull llama3:8b
+        ollama pull qwen2.5:1.5b 
+        # Add any other models you wish to use
+        ```
+*   **Git:** Required for cloning the repository.
+
+## Installation & Setup
+
+1.  **Clone the Repository:**
+    ```bash
+    git clone <your_repository_url> 
+    # Example: git clone https://github.com/yourusername/roocode-data-query.git
+    cd <repository_directory> 
+    # Example: cd roocode-data-query
+    ```
+
+2.  **Install Dependencies:**
+    It's highly recommended to use a virtual environment:
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    pip install -r requirements.txt
+    ```
+
+3.  **Configure Reddit API Access:**
+    *   Copy the example Reddit configuration file:
+        ```bash
+        cp reddit.config.example.json reddit.config.json
+        ```
+    *   Edit `reddit.config.json` with your own Reddit API `client_id`, `client_secret`, and `user_agent`.
+        *   To obtain these credentials, visit [Reddit's app preferences page](https://www.reddit.com/prefs/apps), create a new application (select "script" type). Your `client_id` is under the personal use script section, and `client_secret` is also provided there. The `user_agent` can be a descriptive string (e.g., "RooCodeQueryApp/0.1 by YourUsername").
+    *   Optionally, customize `subreddit` (e.g., "learnpython", "LocalLLaMA"), `post_limit`, and `output_file` within `reddit.config.json`. It is recommended to keep `output_file` as `"reddit_data.txt"` as this is the default expected by `ingest.py`.
+
+4.  **Prepare GitHub Data (Optional):**
+    *   If you have relevant GitHub data (e.g., code snippets, documentation excerpts, issue discussions), save this information as plain text in a file named `github_data.txt` in the root directory of the project.
+    *   The `ingest.py` script will automatically look for this file and process its content if it exists.
+
+## Running the Application
+
+Make sure your Ollama service is running before starting the application.
+
+1.  **Step 1: Scrape Reddit Data:**
+    *   Ensure `reddit.config.json` is correctly configured.
+    *   Run the Reddit scraper script from the project's root directory:
+        ```bash
+        python scrape_reddit.py
+        ```
+    *   This will create or update the `reddit_data.txt` file (or the filename specified in your config) with the fetched data.
+
+2.  **Step 2: Ingest Data into Vector Store:**
+    *   Run the ingestion script from the project's root directory:
+        ```bash
+        python ingest.py
+        ```
+    *   This script processes the text from `reddit_data.txt` (and `github_data.txt` if it exists) and populates or updates the local ChromaDB vector store located in the `./chroma_db` directory.
+
+3.  **Step 3: Launch the Streamlit Application:**
+    *   Run the Streamlit app from the project's root directory:
+        ```bash
+        streamlit run app.py
+        ```
+    *   Streamlit will typically provide a local URL (e.g., `http://localhost:8501`). Open this URL in your web browser to interact with the RooCode Data Query application.
+
+## Project Documentation
+
+This project includes comprehensive documentation to help you understand its architecture, setup, and usage:
+
+*   [**Product Requirements Document (PRODUCT_REQUIREMENTS.md):**](PRODUCT_REQUIREMENTS.md) Detailed overview of the application's goals, features, and target audience.
+*   [**Backend Documentation (BACKEND_DOCUMENTATION.md):**](BACKEND_DOCUMENTATION.md) In-depth information about the backend components, data flow, and key libraries.
+*   [**Frontend Documentation (FRONTEND_DOCUMENTATION.md):**](FRONTEND_DOCUMENTATION.md) Description of the UI structure, styling, and user interaction logic.
+*   [**User Flow Documentation (USER_FLOW_DOCUMENTATION.md):**](USER_FLOW_DOCUMENTATION.md) Step-by-step guide through typical user journeys within the application.
 
 ## Troubleshooting
 
-### Common Issues
+*   **Ollama Connection Issues:**
+    *   Ensure the Ollama service is running and accessible on your system.
+    *   Verify that the models you intend to use (e.g., `llama3:8b`) have been pulled using `ollama pull <model_name>`.
+    *   Check if the model names in the Streamlit UI match those available in Ollama. Use the "Refresh Models" button in the UI.
+*   **`reddit.config.json` Errors:**
+    *   Ensure the file `reddit.config.json` exists in the root directory.
+    *   Double-check that your Reddit API `client_id`, `client_secret`, and `user_agent` are correct and that the JSON structure is valid.
+*   **Python Dependencies & `pip install` Issues:**
+    *   Make sure you are using a compatible Python version (3.7+).
+    *   If `pip install -r requirements.txt` fails, check your internet connection. Try upgrading pip (`pip install --upgrade pip`).
+    *   Ensure you have activated your virtual environment if you are using one.
+*   **"No relevant context found" or Unsatisfactory Answers:**
+    *   This may indicate that the scraped data or `github_data.txt` does not contain information relevant to your query. Consider expanding your data sources or refining your scraping parameters in `reddit.config.json`.
+    *   Ensure the `ingest.py` script ran successfully after updating data sources.
+    *   Experiment with different LLMs available through Ollama, as some may perform better on certain types of queries.
 
-1. **Missing dependencies**
-   - Make sure to run `pip install -r requirements.txt` to install all required packages
-   - If you see errors about langchain packages, try installing them individually:
-     ```
-     pip install langchain langchain-ollama langchain-community langchain-core langchain-chroma langchain-huggingface
-     ```
+## License
 
-2. **Ollama model issues**
-   - Ensure Ollama is running with `ollama serve`
-   - If you can't find models, check available models with `ollama list`
-   - Pull models manually if needed: `ollama pull llama3:8b` or `ollama pull mistral`
-
-3. **ChromaDB errors**
-   - If you see errors about ChromaDB, ensure you have the correct directory structure
-   - The paths should be `./chroma_db_pdfs` for PDF storage
-   - If you need to reset, delete the ChromaDB directories and start fresh
-
-4. **Reddit API configuration**
-   - See the `reddit.config.example.json` file for instructions on getting Reddit API credentials
-   - Make sure to update the config.json file with your actual credentials
-
-5. **Memory issues**
-   - LLMs can be memory-intensive; if you encounter OOM errors, try a smaller model
-   - Reduce batch size or chunk size in the ingestion scripts
-
-For more detailed help, check the GitHub issues section or open a new issue with details about your problem.
-=======
-## Usage
-
-### Prerequisites
-
-- Your computer is a Mac or Linux. It will run on Windows probably with some light tweaks
-- Ollama is installed, see https://ollama.com/download
-- Your base model(s) is in installed, e.g. the defaults are `qwen` and `mistral`. Use `ollama run qwen` for example to fetch the binary, it is a few Gb
-- Python 3+ is installed and available in the environment, use `pyenv` for the best results
-
-### Install
-
-`pyenv` was used by the developer and configured for Python 3.10.2
-
-- Install Python dependencies using `pip install -r requirements.txt`
-- (Optional) `ddgr` for websearch, a shell client for the DuckDuckGo search engine. See https://github.com/jarun/ddgr but you can also [install with Brew](https://formulae.brew.sh/formula/ddgr)
-
-### Configure
-
-_Make sure Ollama service is running before configuring._
-
-- `python setup.py` - this will prompt you for details on the agent to create it. It writes to `config.json` which is required by the main scripts `converse.py` and `app.py`. If you want to run it again, delete any existing `config.json`
-- (optional) scrape PDFs. See section on this below
-
-### Run
-
-_Make sure Ollama service is running before running._
-
-- `./run.sh` - launches the chatbot in your default browser
-- or `./cleanRun.sh` - wipe the local dynamic memory (but keep static memory) and launch again
-
-### Uninstall
-
-- `ollama rm ragmain` to remove the custom LLM from Ollama used for this project
-
-## Contributing
-
-Contributions welcome, though you're probably better off just forking it as I don't have a much greater aspiration for this project, it is just a toy. My Python is not great so please forgive that.
-
-Note also that the ChromaDB files are ignored in `.gitignore`, as well as the JSON and TXT files.
-
-## In more detail
-
-### Ollama
-
-Ollama is a handy LLM runner that has a lot of repositories configured with the most popular models ready to go. It runs on CPU so if you're using a slightly old Macbook Pro (like I am) you can run LLMs locally.
-
-This is particularly cool because the simulated conversation input/output does not leave your computer. Being able to run it yourself locally is positive ownership of your data, protects your privacy and allows you to experiment freely with more confidence.
-
-However, running on CPU is going to be _a lot_ slower, so bear that in mind.
-
-### RAG and ChromaDB
-
-This project uses a so-called vector database called ChromaDB, allowing for fast traversal of huge datasets even on limited hardware (such as your trusty but slightly old Macbook Pro).
-
-This amplifies the usefulness of the LLM by appearing to give it contiguous memory and context beyond the actual context window of the LLM, which at present for locally running LLMs is fairly small.
-
-The effect is to give the simulated conversation a more real, humanlike feel, as well as potentially being useful as a way to search (to 'talk to') your collection of PDFs, keeping a series of related conversations going over a long period of time over multiple sessions.
-
-### PDF ingestion
-
-PDF ingestion is very simple and uses much of the work from the project I based this on, the [pdfchat example project](https://github.com/SonicWarrior1/pdfchat).
-
-What I've added is:
-
-- `./scrape-pdf-list.sh <dir>` - scrape all the PDF files from a given directory (and all subdirs) and output to a file `pdf-files.txt`, note that it will append to this file so you can run it multiple times on different locations, or wipe if you need to before running again
-- `python ingest-pdf.py` - actually scrape (ingest) the PDFs listed in `pdf-files.txt` to ChromaDB. It will exist in the `./chroma_db_pdfs` directory
-
-Even a moderate number of PDFs will create a DB of several Gb, and a large collection may be a few dosen Gb. It will also take a long time with CPU processing, in the order of several hours for a few hundred PDFs, or more than a day for thousands. Even then, it will be quickly searchable once processing is complete, and you will see a nice percentage processed log in the terminal
-
-ChromaDB is really a wrapper on SQLite 3 so you can poke around the DB file will a SQLite viewer but I advise against make changes.
-
-### Long term memory
-
-The long term memory also uses a ChromaDB instance. In summary, when you 'say' something to the chatbot:
-
-- determines if what you said is important or not
-- if important, compress to a few words and store with timestamp
-- generate chatbot response
-- compress response to a few words and store with timestamp
-
-When generating the chatbot response:
-
-- query memory, adding day-bound timestamp (i.e. today, yesterday, 3 days ago, last week, last month, etc.)
-- bring this into context with other context (the static memory from PDFs, web search, etc.)
-
-### Customization
-
-There are three flags in `converse.py`, all turned off but you can turn them on by setting to `True`:
-
-- `WEB_SEARCH_ENABLED = False` - if enabled, will use a web search if LLM responds with "don't know". Requires `ddgr` command (see above). This can be quite good at unblocking a query or getting up to date info.
-- `SPEAK_ALOUD_MAC_ENABLED = False` - if enabled, will use the Mac in-build `say` command to speak the response aloud. It uses the default configured voice, see your Mac speak aloud setting where you can download additional voices, set talking speed, etc.
-- `DEBUG_ENABLED = False` - log information to reveal what the RAG system is picking up from 'memory', what (and if) it extracts for memory, web search keywords, etc.
-
-## Additional notes
-
-I encouarge you to be thoughtful in your usage of this. You can do a lot of things with it that would not be a good idea. It is a toy project intended to experiment with the technology. Don't use it to harm your mental health or that of others.
->>>>>>> 4884a93c4df5a4baa10dac7648dce6b71f4a93c8
+Refer to the `LICENSE` file for licensing information regarding this project.
+*(If a LICENSE file is not present, you might consider adding one, e.g., MIT License).*
