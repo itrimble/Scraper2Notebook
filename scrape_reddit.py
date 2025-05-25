@@ -42,6 +42,7 @@ except Exception as e: # Catch any other unexpected errors during config loading
     print(f"An unexpected error occurred while loading the configuration: {e}")
     sys.exit(1)
 
+
 # --- Main scraping logic ---
 def main_scraping_logic():
     print("Initializing PRAW client...")
@@ -103,3 +104,18 @@ if __name__ == "__main__":
         import traceback
         traceback.print_exc()
         sys.exit(1)
+=======
+
+reddit = praw.Reddit(
+    client_id=reddit_config["client_id"],
+    client_secret=reddit_config["client_secret"],
+    user_agent=reddit_config["user_agent"]
+)
+subreddit = reddit.subreddit(scrape_config["subreddit"])
+with open(scrape_config["output_file"], "w") as f:
+    for post in subreddit.top(limit=scrape_config["post_limit"]):
+        f.write(f"{post.title}\n{post.selftext}\n")
+        for comment in post.comments:
+            if hasattr(comment, 'body'):
+                f.write(f"{comment.body}\n")
+
