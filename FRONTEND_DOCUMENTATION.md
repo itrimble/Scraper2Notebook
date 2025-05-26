@@ -26,28 +26,7 @@ The sidebar, created using `with st.sidebar:`, houses various controls and infor
 *   **Refresh Models Button:** A button created with `st.button("Refresh Models")`. Clicking this button triggers an update of the available LLM list from the Ollama service.
 *   **Clear Chat Button:** A button implemented with `st.button("Clear Chat")`. This allows users to erase the current conversation history from the display.
 *   **Current Model Display:** Text indicating the currently active LLM, shown using `st.write(f"Using model: \`{selected_model}\`")`.
-*   **Current Reddit Scrape Settings Display:**
-    *   `st.sidebar.subheader("Current Reddit Scrape Settings")`
-    *   `st.sidebar.text(f"Subreddit: {st.session_state.reddit_config.get('subreddit', 'N/A')}")`
-    *   `st.sidebar.text(f"Post Limit: {st.session_state.reddit_config.get('post_limit', 'N/A')}")`
-    *   A `st.sidebar.caption` indicates if default values are being used.
-*   **Modify Reddit Scrape Settings:**
-    *   `st.sidebar.subheader("Modify Reddit Scrape Settings")`
-    *   **New Subreddit Input:** `st.sidebar.text_input` for the new subreddit, pre-filled with the current value.
-    *   **New Post Limit Input:** `st.sidebar.number_input` for the new post limit, pre-filled with the current value, with `min_value=1` and `step=5`.
-    *   **Save Reddit Settings Button:** `st.sidebar.button("Save Reddit Settings")` to save the new values to `reddit.config.json`.
-*   **Manual Data Operations:**
-    *   `st.sidebar.subheader("Manual Data Operations")`
-    *   **Scrape Reddit Data Now Button:** `st.sidebar.button("Scrape Reddit Data Now")` to manually trigger the `scrape_reddit.py` script.
-    *   **Last Scrape Attempt Display:** `st.sidebar.markdown` shows the status (timestamp and success/failure) of the last manual scrape.
-    *   **Last Scraping Details Expander:** `st.sidebar.expander` displays the stdout and stderr from the last execution of `scrape_reddit.py`.
-    *   **Ingest Data to DB Now Button:** `st.sidebar.button("Ingest Data to DB Now")` to manually trigger the `ingest.py` script.
-    *   **Last Ingest Attempt Display:** `st.sidebar.markdown` shows the status (timestamp and success/failure) of the last manual ingestion.
-    *   **Last Ingestion Details Expander:** `st.sidebar.expander` displays the stdout and stderr from the last execution of `ingest.py`.
-*   **System Status:**
-    *   `st.sidebar.subheader("System Status")`
-    *   **Vector DB Status Display:** `st.sidebar.markdown` shows the status of the ChromaDB vector store (e.g., "Loaded and Populated", "Not Found").
-*   **Attribution:** A small text element `st.markdown("Built by RooCode")` attributing the application, typically placed at the end of the sidebar.
+*   **Attribution:** A small text element `st.markdown("Built by RooCode")` attributing the application.
 
 ## 3. Styling and Theme
 
@@ -85,28 +64,6 @@ The frontend components are tightly coupled with backend logic defined in `app.p
     1.  The user clicks the "Clear Chat" button in the sidebar.
     2.  `app.py` clears the `st.session_state.messages` list (e.g., `st.session_state["messages"] = []`).
     3.  `st.rerun()` is called to refresh the UI, which now displays an empty chat history area.
-*   **Saving Reddit Scrape Settings:**
-    1.  User modifies the "New Subreddit" text input and/or "New Post Limit" number input under "Modify Reddit Scrape Settings" in the sidebar.
-    2.  User clicks the "Save Reddit Settings" button.
-    3.  `app.py` retrieves the values from these input fields via `st.session_state`.
-    4.  The `update_reddit_config` function is called with the new values.
-    5.  This function reads the existing `reddit.config.json`, updates the `scrape_config` section (or creates it if missing), and writes the changes back to the file.
-    6.  User feedback (success or error messages) is displayed in the sidebar.
-    7.  If successful, `st.session_state.reddit_config` is updated with the new values, and `st.rerun()` is called to refresh the UI, including the "Current Reddit Scrape Settings" display and pre-filling the input fields with the newly saved values.
-*   **Manually Scraping Reddit Data:**
-    1.  User clicks the "Scrape Reddit Data Now" button under "Manual Data Operations" in the sidebar.
-    2.  A spinner (`st.sidebar.spinner`) indicates that the scraping process is underway.
-    3.  `app.py` executes `scrape_reddit.py` as a subprocess using `subprocess.run([sys.executable, "scrape_reddit.py"], ...)`.
-    4.  Upon completion, `st.session_state.last_scrape_status` is updated with a timestamp and the success or failure status (based on the script's exit code).
-    5.  The `stdout` and `stderr` from the script are stored in `st.session_state` (`last_scrape_stdout`, `last_scrape_stderr`).
-    6.  `st.rerun()` is called to update the "Last Scrape Attempt" display and populate the "Last Scraping Details" expander with the script's output.
-*   **Manually Ingesting Data to DB:**
-    1.  User clicks the "Ingest Data to DB Now" button under "Manual Data Operations" in the sidebar.
-    2.  A spinner (`st.sidebar.spinner`) indicates that the ingestion process is underway.
-    3.  `app.py` executes `ingest.py` as a subprocess using `subprocess.run([sys.executable, "ingest.py"], ...)`.
-    4.  Upon completion, `st.session_state.last_ingest_status` is updated with a timestamp and the success or failure status. Direct feedback (success/error message) is also shown.
-    5.  The `stdout` and `stderr` from the script are stored in `st.session_state` (`last_ingest_stdout`, `last_ingest_stderr`).
-    6.  `st.rerun()` is called to update the "Last Ingest Attempt" display and populate the "Last Ingestion Details" expander with the script's output.
 
 ## 5. File Structure (Frontend Perspective)
 

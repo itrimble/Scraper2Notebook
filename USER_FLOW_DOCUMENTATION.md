@@ -23,7 +23,6 @@ This document outlines the typical paths and interactions users will have with t
         ```
         This script processes the text data from `reddit_data.txt` (and `github_data.txt` if present), splits it into chunks, generates vector embeddings for these chunks, and populates or updates the ChromaDB vector store located in the `./chroma_db` directory. The console may display status messages about the number of documents processed or loaded.
 *   **Outcome:** The `reddit.config.json` file is correctly configured with API credentials and scraping parameters. The `./chroma_db` directory is created and populated with the embedded knowledge base, making the application ready for querying.
-*   **Note:** After this initial setup, the `subreddit` and `post_limit` values within `reddit.config.json` can also be viewed and modified directly from the application's UI sidebar. Manual data scraping and ingestion can also be triggered from the UI.
 
 ## 3. Flow 2: Application Launch & Initial View
 
@@ -36,17 +35,13 @@ This document outlines the typical paths and interactions users will have with t
     2.  **Browser Opens:** The application automatically opens in the user's default web browser, typically at an address like `http://localhost:8501`.
     3.  **Main Interface:** The user is presented with the main chat interface. The title "RooCode Data Query" is prominently displayed at the top of the main content area.
     4.  **Sidebar Contents:** The sidebar on the left (expanded by default) displays:
-        *   A "Select model:" dropdown.
-        *   "Refresh Models" button.
-        *   "Clear Chat" button.
+        *   A "Select model:" dropdown showing the currently selected Ollama LLM (or a default if none was previously selected).
+        *   A "Refresh Models" button.
+        *   A "Clear Chat" button.
         *   Text indicating the "Using model: `model_name`".
-        *   Display of "Current Reddit Scrape Settings" (Subreddit, Post Limit).
-        *   Input fields for "Modify Reddit Scrape Settings" (New Subreddit, New Post Limit) and a "Save Reddit Settings" button.
-        *   "Manual Data Operations" section with "Scrape Reddit Data Now" and "Ingest Data to DB Now" buttons, along with their status displays and output expanders.
-        *   "System Status" section showing "Vector DB Status".
         *   A "Built by RooCode" attribution.
     5.  **Chat Area:** The main chat area is initially empty. If the user had a previous session and the application state was somehow preserved by Streamlit (though the application is designed to clear chat history on model change), those messages might appear, but typically it will be blank for a new session or after a model change.
-*   **Outcome:** The RooCode Data Query application is running, visible in the browser, and ready for user interaction with all controls visible.
+*   **Outcome:** The RooCode Data Query application is running, visible in the browser, and ready for user interaction.
 
 ## 4. Flow 3: Querying Data (Main Interaction Loop)
 
@@ -87,40 +82,3 @@ This document outlines the typical paths and interactions users will have with t
     1.  **Click Clear Chat Button:** User clicks the "Clear Chat" button located in the sidebar.
     2.  **Chat Area Reset:** All messages currently displayed in the chat history area (both user-submitted queries and AI-generated responses) are immediately removed.
 *   **Outcome:** The chat interface is reset to an empty state, ready for a new conversation. The underlying LLM selection and other application settings remain unchanged.
-
-## 8. Flow 7: Modifying Reddit Scrape Settings via UI
-
-*   **Objective:** To change the target subreddit and/or post limit for Reddit data scraping directly from the application UI.
-*   **Steps:**
-    1.  **Locate Controls:** User navigates to the "Modify Reddit Scrape Settings" section in the sidebar.
-    2.  **Enter New Subreddit (Optional):** User types the desired subreddit name into the "New Subreddit:" text input field.
-    3.  **Enter New Post Limit (Optional):** User adjusts the value in the "New Post Limit:" number input field.
-    4.  **Save Settings:** User clicks the "Save Reddit Settings" button.
-    5.  **Feedback:**
-        *   If successful, a "Reddit settings saved successfully!" message appears in the sidebar. The "Current Reddit Scrape Settings" display updates to show the new values, and the input fields are pre-filled with these new values.
-        *   If there's an error (e.g., `reddit.config.json` not found, not writable, or malformed), an error message is displayed in the sidebar.
-*   **Outcome:** The `reddit.config.json` file on the server is updated with the new subreddit and post limit. Subsequent manual or automated Reddit scraping will use these new parameters.
-
-## 9. Flow 8: Triggering Reddit Data Scraping via UI
-
-*   **Objective:** To manually initiate the process of scraping data from Reddit using the current settings in `reddit.config.json`.
-*   **Steps:**
-    1.  **Locate Button:** User navigates to the "Manual Data Operations" section in the sidebar and finds the "Scrape Reddit Data Now" button.
-    2.  **Click Button:** User clicks the "Scrape Reddit Data Now" button.
-    3.  **Spinner Indicator:** A spinner appears in the sidebar with the message "Scraping Reddit data... Please wait."
-    4.  **Status Update:** Upon completion (or failure), the "Last Scrape Attempt:" text below the button updates with a timestamp and the status (e.g., "Success" or "Failed (Code: X)").
-    5.  **View Details (Optional):** User can click on the "Last Scraping Details (Output from scrape_reddit.py)" expander to view the standard output and standard error from the `scrape_reddit.py` script execution, as well as its exit code.
-*   **Outcome:** The `scrape_reddit.py` script is executed on the server. If successful, the Reddit data file (e.g., `reddit_data.txt`) is updated. The user is informed of the outcome via the UI.
-
-## 10. Flow 9: Triggering Data Ingestion via UI
-
-*   **Objective:** To manually initiate the process of ingesting data from the source files (e.g., `reddit_data.txt`, `github_data.txt`) into the ChromaDB vector store.
-*   **Steps:**
-    1.  **Locate Button:** User navigates to the "Manual Data Operations" section in the sidebar and finds the "Ingest Data to DB Now" button.
-    2.  **Click Button:** User clicks the "Ingest Data to DB Now" button.
-    3.  **Spinner Indicator:** A spinner appears in the sidebar with the message "Ingesting data into vector store... Please wait."
-    4.  **Feedback & Status Update:**
-        *   A direct success ("Data ingestion completed successfully!") or error ("Data ingestion failed.") message is displayed in the sidebar.
-        *   The "Last Ingest Attempt:" text below the button updates with a timestamp and the status (e.g., "Success" or "Failed (Code: X)").
-    5.  **View Details (Optional):** User can click on the "Last Ingestion Details (Output from ingest.py)" expander to view the standard output and standard error from the `ingest.py` script execution, as well as its exit code.
-*   **Outcome:** The `ingest.py` script is executed on the server. If successful, the ChromaDB vector store (`./chroma_db`) is updated with the latest data. The user is informed of the outcome via the UI. The "Vector DB Status" display may also update to reflect changes (e.g., from "Not Found" to "Loaded and Populated").

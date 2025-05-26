@@ -14,10 +14,7 @@ The RooCode Data Query Application is a Python-based tool designed to provide a 
 *   **Polished UI:** A dark-themed, professional interface built with Streamlit, featuring a sidebar for controls and clear chat display.
 *   **Chat Management:** Easily clear chat history for a fresh start.
 *   **Performance Metrics:** Displays response time for each AI-generated answer.
-*   **UI Controls for Data Operations:** Sidebar controls for manual Reddit data scraping and ingestion into the vector store.
-*   **UI Controls for Scrape Configuration:** Sidebar controls for viewing and modifying Reddit scrape parameters (subreddit, post limit), saved to `reddit.config.json`.
-*   **System Status Display:** Sidebar provides a basic status of the Vector DB.
-*   **Automated Data Updates:** Includes scripts for daily data scraping and knowledge base updates, with Pushover notifications. See the [Automation Guide](AUTOMATION_GUIDE.md) for setup.
+
 
 ## Tech Stack
 
@@ -98,7 +95,6 @@ Make sure your Ollama service is running before starting the application.
         streamlit run app.py
         ```
     *   Streamlit will typically provide a local URL (e.g., `http://localhost:8501`). Open this URL in your web browser to interact with the RooCode Data Query application.
-    *   **Note:** While initial data scraping and ingestion must be done via command line as described above, subsequent scraping, ingestion, and modification of Reddit scrape parameters can also be performed directly from the application's UI sidebar.
 
 ## Project Documentation
 
@@ -108,7 +104,10 @@ This project includes comprehensive documentation to help you understand its arc
 *   [**Backend Documentation (BACKEND_DOCUMENTATION.md):**](BACKEND_DOCUMENTATION.md) In-depth information about the backend components, data flow, and key libraries.
 *   [**Frontend Documentation (FRONTEND_DOCUMENTATION.md):**](FRONTEND_DOCUMENTATION.md) Description of the UI structure, styling, and user interaction logic.
 *   [**User Flow Documentation (USER_FLOW_DOCUMENTATION.md):**](USER_FLOW_DOCUMENTATION.md) Step-by-step guide through typical user journeys within the application.
+
 *   [**Automation Guide (AUTOMATION_GUIDE.md):**](AUTOMATION_GUIDE.md) Instructions for setting up automated daily data updates and notifications.
+
+
 
 ## Troubleshooting
 
