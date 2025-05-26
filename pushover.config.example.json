@@ -1,0 +1,9 @@
+{
+    "pushover": {
+        "user_key": "YOUR_PUSHOVER_USER_KEY",
+        "api_token": "YOUR_PUSHOVER_APP_API_TOKEN"
+    },
+    "message_settings": {
+        "default_title": "RooCode Data Update"
+    }
+}
